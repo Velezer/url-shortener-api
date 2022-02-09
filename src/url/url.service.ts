@@ -3,13 +3,13 @@ import { Repository } from 'typeorm';
 import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
 import { Url } from './entities/url.entity';
-import { APPCONSTANTS } from '../app.constants';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UrlService {
   constructor(
-    @Inject(APPCONSTANTS.urlRepository)
-    private urlRepo: Repository<Url>
+    @InjectRepository(Url)
+    private urlRepo: Repository<Url>,
   ) { }
 
   create(createUrlDto: CreateUrlDto) {
@@ -18,7 +18,7 @@ export class UrlService {
   }
 
   findAll() {
-    return `This action returns all url`;
+    return this.urlRepo.find();
   }
 
   findOne(id: number) {
