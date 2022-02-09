@@ -3,7 +3,7 @@ import { UrlService } from './url.service';
 import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
 
-@Controller('url')
+@Controller('urls')
 export class UrlController {
   constructor(private readonly urlService: UrlService) {}
 
