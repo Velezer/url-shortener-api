@@ -1,5 +1,9 @@
-export class CreateUrlDto {
-    longUrl: string;
+import { IsNotEmpty } from "class-validator";
 
+export class CreateUrlDto {
+    @IsNotEmpty()
+    longUrl: string;
+    
+    @IsNotEmpty()
     shortUrl: string;
 }
