@@ -5,14 +5,14 @@ export const databaseProviders = [
   {
     provide: APPCONSTANTS.dbConnection,
     useFactory: async () => await createConnection({
-      type: 'postgres',
-      host: '192.168.56.101',
-      port: 5432,
-      username: 'user',
-      password: 'password',
-      database: 'db_url_shortener',
+      type: process.env.DB_TYPE as 'postgres',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DBNAME,
       entities: [
-          __dirname + '/../**/*.entity{.ts,.js}',
+        __dirname + '/../**/*.entity{.ts,.js}',
       ],
       synchronize: true,
     }),
