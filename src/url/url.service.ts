@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
@@ -7,29 +7,36 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class UrlService {
+
   constructor(
     @InjectRepository(Url)
     private urlRepo: Repository<Url>,
   ) { }
 
-  create(createUrlDto: CreateUrlDto) {
+  async create(createUrlDto: CreateUrlDto) {
+    const url = this.urlRepo.create(createUrlDto)
 
-    return 'This action adds a new url';
+    const res = await this.urlRepo.save(url)
+
+    return res;
   }
 
   findAll() {
-    return this.urlRepo.find();
+    return this.urlRepo.find()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} url`;
+  findOneByShortUrl(shortUrl: string) {
+    return this.urlRepo.findOne({ shortUrl });
   }
 
-  update(id: number, updateUrlDto: UpdateUrlDto) {
-    return `This action updates a #${id} url`;
+  async update(shortUrl: string, updateUrlDto: UpdateUrlDto) {
+    const found = await this.urlRepo.findOne({ shortUrl })
+
+    return this.urlRepo.update(found.id, updateUrlDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} url`;
+  async remove(shortUrl: string) {
+    const found = await this.urlRepo.findOne({ shortUrl })
+    return this.urlRepo.delete(found.id);
   }
 }

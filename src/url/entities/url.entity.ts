@@ -9,7 +9,7 @@ export class Url {
     @Column()
     longUrl: string;
 
-    @Column()
+    @Column({ unique: true })
     shortUrl: string;
 
 }

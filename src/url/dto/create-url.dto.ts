@@ -1,1 +1,5 @@
-export class CreateUrlDto {}
+export class CreateUrlDto {
+    longUrl: string;
+
+    shortUrl: string;
+}

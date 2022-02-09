@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, HostParam } from '@nestjs/common';
 import { UrlService } from './url.service';
 import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
@@ -12,23 +12,23 @@ export class UrlController {
     return this.urlService.create(createUrlDto);
   }
 
-  @Get()
+  @Get('')
   findAll() {
     return this.urlService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.urlService.findOne(+id);
+  @Get(':shortUrl')
+  findOne(@Param('shortUrl') shortUrl: string) {
+    return this.urlService.findOneByShortUrl(shortUrl);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUrlDto: UpdateUrlDto) {
-    return this.urlService.update(+id, updateUrlDto);
+  @Patch(':shortUrl')
+  update(@Param('shortUrl') shortUrl: string, @Body() updateUrlDto: UpdateUrlDto) {
+    return this.urlService.update(shortUrl, updateUrlDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.urlService.remove(+id);
+  @Delete(':shortUrl')
+  remove(@Param('shortUrl') shortUrl: string) {
+    return this.urlService.remove(shortUrl);
   }
 }
