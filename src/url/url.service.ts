@@ -15,10 +15,7 @@ export class UrlService {
 
   async create(createUrlDto: CreateUrlDto) {
     const url = this.urlRepo.create(createUrlDto)
-
-    const res = await this.urlRepo.save(url)
-
-    return res;
+    return await this.urlRepo.save(url);
   }
 
   findAll() {
@@ -31,12 +28,13 @@ export class UrlService {
 
   async update(shortUrl: string, updateUrlDto: UpdateUrlDto) {
     const found = await this.urlRepo.findOne({ shortUrl })
+    found.shortUrl = updateUrlDto.shortUrl
 
-    return this.urlRepo.update(found.id, updateUrlDto);
+    return await this.urlRepo.save(found);
   }
 
   async remove(shortUrl: string) {
     const found = await this.urlRepo.findOne({ shortUrl })
-    return this.urlRepo.delete(found.id);
+    return this.urlRepo.remove(found);
   }
 }

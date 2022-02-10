@@ -9,7 +9,7 @@ import { UrlModule } from './url/url.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ['.env.dev.local', '.env'],
+      envFilePath: ['.env', '.env.dev', '.env.dev.local'],
     }),
     TypeOrmModule.forRoot({
       type: process.env.DB_TYPE as 'postgres',

@@ -1,34 +1,66 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, HostParam } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus } from '@nestjs/common';
 import { UrlService } from './url.service';
 import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
+import { ApiResponse } from './dto/api-response.dto';
+import { Response } from 'express';
 
 @Controller('urls')
 export class UrlController {
-  constructor(private readonly urlService: UrlService) {}
+  constructor(private readonly urlService: UrlService) { }
 
   @Post()
-  create(@Body() createUrlDto: CreateUrlDto) {
-    return this.urlService.create(createUrlDto);
+  async create(@Body() createUrlDto: CreateUrlDto, @Res() res: Response) {
+    const data = await this.urlService.create(createUrlDto);
+
+    const apires: ApiResponse = {
+      statusCode: HttpStatus.CREATED,
+      data: data
+    }
+    return res.status(HttpStatus.CREATED).json(apires)
   }
 
   @Get('')
-  findAll() {
-    return this.urlService.findAll();
+  async findAll(@Res() res: Response) {
+    const data = await this.urlService.findAll()
+
+    const apires: ApiResponse = {
+      statusCode: HttpStatus.OK,
+      data: data
+    }
+    return res.status(HttpStatus.OK).json(apires)
   }
 
   @Get(':shortUrl')
-  findOne(@Param('shortUrl') shortUrl: string) {
-    return this.urlService.findOneByShortUrl(shortUrl);
+  async findOne(@Param('shortUrl') shortUrl: string, @Res() res: Response) {
+    const data = await this.urlService.findOneByShortUrl(shortUrl);
+
+    const apires: ApiResponse = {
+      statusCode: HttpStatus.OK,
+      data: data
+    }
+    return res.status(HttpStatus.OK).json(apires)
   }
 
   @Patch(':shortUrl')
-  update(@Param('shortUrl') shortUrl: string, @Body() updateUrlDto: UpdateUrlDto) {
-    return this.urlService.update(shortUrl, updateUrlDto);
+  async update(@Param('shortUrl') shortUrl: string, @Body() updateUrlDto: UpdateUrlDto, @Res() res: Response) {
+    const data = await this.urlService.update(shortUrl, updateUrlDto);
+
+    const apires: ApiResponse = {
+      statusCode: HttpStatus.OK,
+      data: data
+    }
+    return res.status(HttpStatus.OK).json(apires)
   }
 
   @Delete(':shortUrl')
-  remove(@Param('shortUrl') shortUrl: string) {
-    return this.urlService.remove(shortUrl);
+  async remove(@Param('shortUrl') shortUrl: string, @Res() res: Response) {
+    const data = await this.urlService.remove(shortUrl);
+
+    const apires: ApiResponse = {
+      statusCode: HttpStatus.OK,
+      data: data
+    }
+    return res.status(HttpStatus.OK).json(apires)
   }
 }
