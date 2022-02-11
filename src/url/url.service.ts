@@ -1,5 +1,5 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { QueryFailedError, Repository } from 'typeorm';
 import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
 import { Url } from './entities/url.entity';
@@ -19,8 +19,11 @@ export class UrlService {
     try {
       const result = await this.urlRepo.save(url);
       return result
-    } catch (error) {
-      console.log(error)
+    } catch (err) {
+      if (err instanceof QueryFailedError) {
+        throw new ConflictException(err.message)
+      } 
+     
     }
 
   }
@@ -31,7 +34,6 @@ export class UrlService {
 
   async findOneByShortUrl(shortUrl: string): Promise<Url> {
     const found = await this.urlRepo.findOne({ shortUrl });
-    console.log(found)
     if (!found) {
       throw new NotFoundException()
     }

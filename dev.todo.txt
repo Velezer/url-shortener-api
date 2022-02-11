@@ -1,6 +1,4 @@
 
-409 handle duplicate key value violates
-
 auth
 
 swagger documentation
