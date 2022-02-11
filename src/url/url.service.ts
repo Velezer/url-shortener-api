@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
@@ -15,26 +15,38 @@ export class UrlService {
 
   async create(createUrlDto: CreateUrlDto) {
     const url = this.urlRepo.create(createUrlDto)
-    return await this.urlRepo.save(url);
+
+    try {
+      const result = await this.urlRepo.save(url);
+      return result
+    } catch (error) {
+      console.log(error)
+    }
+
   }
 
   findAll() {
     return this.urlRepo.find()
   }
 
-  findOneByShortUrl(shortUrl: string) {
-    return this.urlRepo.findOne({ shortUrl });
+  async findOneByShortUrl(shortUrl: string): Promise<Url> {
+    const found = await this.urlRepo.findOne({ shortUrl });
+    console.log(found)
+    if (!found) {
+      throw new NotFoundException()
+    }
+    return found
   }
 
   async update(shortUrl: string, updateUrlDto: UpdateUrlDto) {
-    const found = await this.urlRepo.findOne({ shortUrl })
-    found.shortUrl = updateUrlDto.shortUrl
+    const found = await this.findOneByShortUrl(shortUrl)
+    found.shortUrl = updateUrlDto.shortUrl //update the shortUrl
 
     return await this.urlRepo.save(found);
   }
 
   async remove(shortUrl: string) {
-    const found = await this.urlRepo.findOne({ shortUrl })
+    const found = await this.findOneByShortUrl(shortUrl)
     return this.urlRepo.remove(found);
   }
 }
