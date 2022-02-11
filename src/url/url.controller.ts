@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpCode } from '@nestjs/common';
 import { UrlService } from './url.service';
 import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
@@ -17,7 +17,7 @@ export class UrlController {
       statusCode: HttpStatus.CREATED,
       data: data
     }
-    return res.status(HttpStatus.CREATED).json(apires)
+    return res.json(apires)
   }
 
   @Get('')
@@ -28,7 +28,7 @@ export class UrlController {
       statusCode: HttpStatus.OK,
       data: data
     }
-    return res.status(HttpStatus.OK).json(apires)
+    return res.json(apires)
   }
 
   @Get(':shortUrl')
@@ -39,7 +39,7 @@ export class UrlController {
       statusCode: HttpStatus.OK,
       data: data
     }
-    return res.status(HttpStatus.OK).json(apires)
+    return res.json(apires)
   }
 
   @Patch(':shortUrl')
@@ -50,17 +50,14 @@ export class UrlController {
       statusCode: HttpStatus.OK,
       data: data
     }
-    return res.status(HttpStatus.OK).json(apires)
+    return res.json(apires)
   }
 
   @Delete(':shortUrl')
+  @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('shortUrl') shortUrl: string, @Res() res: Response) {
     const data = await this.urlService.remove(shortUrl);
 
-    const apires: ApiResponse = {
-      statusCode: HttpStatus.OK,
-      data: data
-    }
-    return res.status(HttpStatus.OK).json(apires)
+    return res
   }
 }
