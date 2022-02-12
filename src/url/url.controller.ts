@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpCode, HttpException, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpCode } from '@nestjs/common';
 import { UrlService } from './url.service';
 import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
@@ -57,7 +57,6 @@ export class UrlController {
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('shortUrl') shortUrl: string, @Res() res: Response) {
     await this.urlService.remove(shortUrl);
-
-    return res
+    return res.json()
   }
 }

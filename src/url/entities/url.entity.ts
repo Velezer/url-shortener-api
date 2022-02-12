@@ -6,10 +6,10 @@ export class Url {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ nullable: false })
     longUrl: string;
 
-    @Column({ unique: true })
+    @Column({ unique: true, nullable: false })
     shortUrl: string;
 
 }
