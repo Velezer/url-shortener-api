@@ -1,6 +1,7 @@
 
-user management
-auth
+user login
+
+auth for Url
 
 swagger documentation
 
