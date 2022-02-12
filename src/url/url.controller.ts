@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Htt
 import { UrlService } from './url.service';
 import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
-import { ApiResponse } from './dto/api-response.dto';
+import { ApiResponse } from '../app.dto';
 import { Response } from 'express';
 
 @Controller('urls')

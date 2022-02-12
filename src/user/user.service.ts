@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -12,23 +12,43 @@ export class UserService {
     private userRepo: Repository<User>,
   ) { }
 
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  async create(createUserDto: CreateUserDto) {
+    const user = this.userRepo.create(createUserDto)
+
+    try {
+      const result = await this.userRepo.save(user);
+      return result
+    } catch (err) {
+      if (err instanceof QueryFailedError) {
+        throw new ConflictException(err.message)
+      } 
+     
+    }
   }
 
   findAll() {
-    return `This action returns all user`;
+    return this.userRepo.find()
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    const found = await this.userRepo.findOne(id);
+    if (!found) {
+      throw new NotFoundException()
+    }
+    return found
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const found = await this.findOne(id)
+    found.email = updateUserDto.email
+    found.username = updateUserDto.username
+    found.password = updateUserDto.password
+    
+    return await this.userRepo.save(found);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number) {
+    const found = await this.findOne(id)
+    return this.userRepo.remove(found);
   }
 }
