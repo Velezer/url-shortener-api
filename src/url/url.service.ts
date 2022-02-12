@@ -21,9 +21,9 @@ export class UrlService {
       return result
     } catch (err) {
       if (err instanceof QueryFailedError) {
-        throw new ConflictException(err.message)
-      } 
-     
+        throw new ConflictException('short name cannot be used', err.message)
+      }
+
     }
 
   }
