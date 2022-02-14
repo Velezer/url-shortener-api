@@ -1,10 +1,7 @@
-fix jwt sign jwt key
 
 bcrypt user password
 
-user login
-
-auth for Url
+auth for Url update, delete
 
 relation, user has many urls
 
