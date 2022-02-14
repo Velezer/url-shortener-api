@@ -21,8 +21,8 @@ export class UserService {
     } catch (err) {
       if (err instanceof QueryFailedError) {
         throw new ConflictException(err.message)
-      } 
-     
+      }
+
     }
   }
 
@@ -38,12 +38,28 @@ export class UserService {
     return found
   }
 
+  async findOneByEmail(email: string) {
+    const found = await this.userRepo.findOne({ email });
+    if (!found) {
+      throw new NotFoundException()
+    }
+    return found
+  }
+
+  async findOneByUsername(username: string) {
+    const found = await this.userRepo.findOne({ username });
+    if (!found) {
+      throw new NotFoundException()
+    }
+    return found
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto) {
     const found = await this.findOne(id)
     found.email = updateUserDto.email
     found.username = updateUserDto.username
     found.password = updateUserDto.password
-    
+
     return await this.userRepo.save(found);
   }
 
