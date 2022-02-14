@@ -1,3 +1,6 @@
+fix jwt sign jwt key
+
+bcrypt user password
 
 user login
 

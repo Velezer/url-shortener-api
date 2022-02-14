@@ -12,6 +12,7 @@ import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
+      isGlobal: true,
       envFilePath: ['.env', '.env.dev', '.env.dev.local'],
     }),
     TypeOrmModule.forRoot({
@@ -25,8 +26,8 @@ import { AuthModule } from './auth/auth.module';
       synchronize: true,
     }),
     UrlModule,
-    AuthModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
