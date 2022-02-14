@@ -1,4 +1,5 @@
 
+learn about jwt strategy
 bcrypt user password
 
 auth for Url update, delete
