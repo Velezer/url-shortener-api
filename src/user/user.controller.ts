@@ -1,12 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Put, HttpCode, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiResponse } from 'src/app.dto';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(
+    private readonly userService: UserService,
+  ) { }
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<ApiResponse> {
@@ -17,6 +19,7 @@ export class UserController {
       data: data
     }
   }
+
 
   @Get()
   async findAll(): Promise<ApiResponse> {
