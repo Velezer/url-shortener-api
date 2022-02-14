@@ -3,5 +3,7 @@ user login
 
 auth for Url
 
+relation, user has many urls
+
 swagger documentation
 
