@@ -7,6 +7,7 @@ import { Url } from './url/entities/url.entity';
 import { UrlModule } from './url/url.module';
 import { User } from './user/entities/user.entity';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -20,11 +21,12 @@ import { UserModule } from './user/user.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DBNAME,
-      entities: [Url,User],
+      entities: [Url, User],
       synchronize: true,
     }),
     UrlModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
