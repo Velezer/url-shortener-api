@@ -7,7 +7,7 @@ import { PayloadUser } from './dto/payload.dto';
 export class AuthService {
   constructor(
     private userService: UserService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) { }
 
   async validateUser(email: string, pass: string): Promise<PayloadUser> {
@@ -23,7 +23,9 @@ export class AuthService {
   async login(user: PayloadUser) {
     const payload = user;
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload, { 
+        secret: process.env.JWT_SECRET,
+      }),
     };
   }
 }

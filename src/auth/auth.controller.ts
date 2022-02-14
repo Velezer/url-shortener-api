@@ -18,7 +18,7 @@ export class AuthController {
         const data = await this.authService.login(user);
 
         return {
-            statusCode: HttpStatus.CREATED,
+            statusCode: HttpStatus.OK,
             data: data
         }
     }
