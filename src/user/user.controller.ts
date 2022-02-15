@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Put, HttpCode, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Put, HttpCode, UseGuards, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiResponse } from 'src/app.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { JwtCurrentUserAuthGuard } from 'src/auth/guards/jwt-current-user-auth.guard';
 
 @Controller('users')
 export class UserController {
@@ -20,17 +22,18 @@ export class UserController {
     }
   }
 
+  // @UseGuards(JwtAuthGuard)
+  // @Get()
+  // async findAll(): Promise<ApiResponse> {
+  //   const data = await this.userService.findAll();
 
-  @Get()
-  async findAll(): Promise<ApiResponse> {
-    const data = await this.userService.findAll();
+  //   return {
+  //     statusCode: HttpStatus.OK,
+  //     data: data
+  //   }
+  // }
 
-    return {
-      statusCode: HttpStatus.OK,
-      data: data
-    }
-  }
-
+  @UseGuards(JwtCurrentUserAuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<ApiResponse> {
     const data = await this.userService.findOne(+id);
@@ -42,6 +45,7 @@ export class UserController {
 
   }
 
+  @UseGuards(JwtCurrentUserAuthGuard)
   @Put(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<ApiResponse> {
     const data = await this.userService.update(+id, updateUserDto);
@@ -52,6 +56,7 @@ export class UserController {
     }
   }
 
+  @UseGuards(JwtCurrentUserAuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<ApiResponse> {
     await this.userService.remove(+id);
