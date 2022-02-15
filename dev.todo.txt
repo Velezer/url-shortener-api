@@ -1,11 +1,5 @@
 
-relation, user has many urls
-jwturlowner guard
-
 bcrypt user password
-
-auth for Url update, delete
-
 
 swagger documentation
 

@@ -7,5 +7,6 @@ export class UpdateUrlDto extends PartialType(CreateUrlDto) {
     longUrl?: string;
 
     @IsNotEmpty()
-    shortUrl: string;
+    shortName?: string;
+
 }

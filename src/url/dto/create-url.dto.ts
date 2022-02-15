@@ -6,5 +6,6 @@ export class CreateUrlDto {
     longUrl: string;
     
     @IsNotEmpty()
-    shortUrl: string;
+    shortName: string;
+
 }

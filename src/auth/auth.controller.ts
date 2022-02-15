@@ -12,7 +12,7 @@ export class AuthController {
     ) { }
 
     @HttpCode(HttpStatus.OK)
-    @Post()
+    @Post('login')
     async login(@Body() loginUserDto: LoginUserDto): Promise<ApiResponse> {
         const user = await this.authService.validateUser(loginUserDto.email, loginUserDto.password);
 
