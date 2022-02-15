@@ -38,6 +38,7 @@ export class UrlController {
     }
   }
 
+  // @UseGuards(JwtUrlOwner)
   @Patch(':shortUrl')
   async update(@Param('shortUrl') shortUrl: string, @Body() updateUrlDto: UpdateUrlDto): Promise<ApiResponse> {
     const data = await this.urlService.update(shortUrl, updateUrlDto);
@@ -48,6 +49,7 @@ export class UrlController {
     }
   }
 
+  // @UseGuards(JwtUrlOwner)
   @Delete(':shortUrl')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('shortUrl') shortUrl: string): Promise<ApiResponse> {

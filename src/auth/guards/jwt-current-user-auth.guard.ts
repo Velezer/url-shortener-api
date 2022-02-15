@@ -1,9 +1,13 @@
 import { BadRequestException, ExecutionContext, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Observable } from 'rxjs';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
+/**
+ * check url params id with payload jwt
+ */
 @Injectable()
-export class JwtCurrentUserAuthGuard extends AuthGuard('jwt') {
+export class JwtCurrentUserAuthGuard extends JwtAuthGuard {
   private id: number;
 
   canActivate(
@@ -26,7 +30,6 @@ export class JwtCurrentUserAuthGuard extends AuthGuard('jwt') {
   }
 
   handleRequest(err, user, info) {
-    // You can throw an exception based on either "info" or "err" arguments
     if (err || !user) {
       throw err || new UnauthorizedException();
     }

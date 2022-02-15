@@ -1,10 +1,11 @@
 
-learn about jwt strategy
+relation, user has many urls
+jwturlowner guard
+
 bcrypt user password
 
 auth for Url update, delete
 
-relation, user has many urls
 
 swagger documentation
 
