@@ -4,7 +4,6 @@ import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
 import { Url } from './entities/url.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class UrlService {
@@ -12,12 +11,11 @@ export class UrlService {
   constructor(
     @InjectRepository(Url)
     private urlRepo: Repository<Url>,
-    private readonly userService: UserService
   ) { }
 
-  async create(createUrlDto: CreateUrlDto, userId: number) {
+  async create(createUrlDto: CreateUrlDto, user: any) {
     const url = this.urlRepo.create(createUrlDto)
-    url.user = await this.userService.findOne(userId)
+    url.user = user
 
     try {
       const result = await this.urlRepo.save(url);

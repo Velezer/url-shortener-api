@@ -1,9 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, Put, HttpCode, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Res, HttpStatus, Put, HttpCode, UseGuards, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiResponse } from 'src/app.dto';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { JwtCurrentUserAuthGuard } from 'src/auth/guards/jwt-current-user-auth.guard';
 
 @Controller('users')
