@@ -4,7 +4,10 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiResponse } from 'src/app.dto';
 import { JwtCurrentUserAuthGuard } from 'src/auth/guards/jwt-current-user-auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+
+@ApiTags('users')
 @Controller('users')
 export class UserController {
   constructor(

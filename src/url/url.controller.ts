@@ -4,7 +4,9 @@ import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
 import { ApiResponse } from '../app.dto';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('urls')
 @Controller('urls')
 export class UrlController {
   constructor(private readonly urlService: UrlService) { }

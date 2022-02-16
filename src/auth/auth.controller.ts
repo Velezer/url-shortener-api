@@ -1,10 +1,10 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { ApiResponse } from 'src/app.dto';
 import { LoginUserDto } from 'src/auth/dto/login-user.dto';
 import { AuthService } from './auth.service';
-import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { JwtCurrentUserAuthGuard } from './guards/jwt-current-user-auth.guard';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
     constructor(
@@ -24,15 +24,4 @@ export class AuthController {
         }
     }
 
-    @UseGuards(JwtCurrentUserAuthGuard)
-    @Get()
-    protectedUrl(@Req() req: any) {
-
-        return req.user
-    }
-    @Get(':id')
-    @UseGuards(JwtCurrentUserAuthGuard)
-    protecteadUrl(@Req() req: any) {
-        return req.user
-    }
 }
