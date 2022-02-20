@@ -5,10 +5,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Url } from './url/entities/url.entity';
 import { UrlModule } from './url/url.module';
+import { User } from './user/entities/user.entity';
+import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      isGlobal: true,
       envFilePath: ['.env', '.env.dev', '.env.dev.local'],
     }),
     TypeOrmModule.forRoot({
@@ -18,10 +22,12 @@ import { UrlModule } from './url/url.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DBNAME,
-      entities: [Url],
+      entities: [Url, User],
       synchronize: true,
     }),
     UrlModule,
+    UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

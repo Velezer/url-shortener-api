@@ -1,6 +1,5 @@
 
-user management
-auth
+bcrypt user password
 
 swagger documentation
 

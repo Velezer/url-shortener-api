@@ -1,62 +1,64 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, HttpStatus, HttpCode, UseGuards, Req } from '@nestjs/common';
 import { UrlService } from './url.service';
 import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
-import { ApiResponse } from './dto/api-response.dto';
-import { Response } from 'express';
+import { ApiResponse } from '../app.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('urls')
 @Controller('urls')
 export class UrlController {
   constructor(private readonly urlService: UrlService) { }
 
+
+  @UseGuards(JwtAuthGuard)
   @Post()
-  async create(@Body() createUrlDto: CreateUrlDto, @Res() res: Response) {
-    const data = await this.urlService.create(createUrlDto);
+  async create(@Body() createUrlDto: CreateUrlDto, @Req() req: any): Promise<ApiResponse> {
+    const url = await this.urlService.create(createUrlDto, req.user.userId);
 
-    const apires: ApiResponse = {
+    return {
       statusCode: HttpStatus.CREATED,
-      data: data
+      data: url
     }
-    return res.json(apires)
   }
 
-  @Get('')
-  async findAll(@Res() res: Response) {
-    const data = await this.urlService.findAll()
+  // @Get('')
+  // async findAll(): Promise<ApiResponse> {
+  //   const data = await this.urlService.findAll()
 
-    const apires: ApiResponse = {
+  //   return {
+  //     statusCode: HttpStatus.OK,
+  //     data: data
+  //   }
+  // }
+
+  @Get(':shortName')
+  async findOne(@Param('shortName') shortName: string): Promise<ApiResponse> {
+    const data = await this.urlService.findOneByShortName(shortName);
+
+    return {
       statusCode: HttpStatus.OK,
       data: data
     }
-    return res.json(apires)
   }
 
-  @Get(':shortUrl')
-  async findOne(@Param('shortUrl') shortUrl: string, @Res() res: Response) {
-    const data = await this.urlService.findOneByShortUrl(shortUrl);
+  @UseGuards(JwtAuthGuard)
+  @Patch(':shortName')
+  async update(@Param('shortName') shortName: string, @Body() updateUrlDto: UpdateUrlDto, @Req() req: any): Promise<ApiResponse> {
+    const data = await this.urlService.update(shortName, updateUrlDto, req.user.id);
 
-    const apires: ApiResponse = {
+    return {
       statusCode: HttpStatus.OK,
       data: data
     }
-    return res.json(apires)
   }
 
-  @Patch(':shortUrl')
-  async update(@Param('shortUrl') shortUrl: string, @Body() updateUrlDto: UpdateUrlDto, @Res() res: Response) {
-    const data = await this.urlService.update(shortUrl, updateUrlDto);
-
-    const apires: ApiResponse = {
-      statusCode: HttpStatus.OK,
-      data: data
-    }
-    return res.json(apires)
-  }
-
-  @Delete(':shortUrl')
+  @UseGuards(JwtAuthGuard)
+  @Delete(':shortName')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async remove(@Param('shortUrl') shortUrl: string, @Res() res: Response) {
-    await this.urlService.remove(shortUrl);
-    return res.json()
+  async remove(@Param('shortName') shortName: string, @Req() req: any): Promise<ApiResponse> {
+    await this.urlService.remove(shortName, req.user.id);
+    return { statusCode: HttpStatus.NO_CONTENT }
   }
 }

@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { QueryFailedError, Repository } from 'typeorm';
 import { CreateUrlDto } from './dto/create-url.dto';
 import { UpdateUrlDto } from './dto/update-url.dto';
@@ -13,17 +13,18 @@ export class UrlService {
     private urlRepo: Repository<Url>,
   ) { }
 
-  async create(createUrlDto: CreateUrlDto) {
+  async create(createUrlDto: CreateUrlDto, user: any) {
     const url = this.urlRepo.create(createUrlDto)
+    url.user = user
 
     try {
       const result = await this.urlRepo.save(url);
       return result
     } catch (err) {
       if (err instanceof QueryFailedError) {
-        throw new ConflictException(err.message)
-      } 
-     
+        throw new ConflictException('short name cannot be used', err.message)
+      }
+
     }
 
   }
@@ -32,23 +33,33 @@ export class UrlService {
     return this.urlRepo.find()
   }
 
-  async findOneByShortUrl(shortUrl: string): Promise<Url> {
-    const found = await this.urlRepo.findOne({ shortUrl });
+  async findOneByShortName(shortName: string): Promise<Url> {
+    const found = await this.urlRepo.findOne({ shortName });
     if (!found) {
       throw new NotFoundException()
     }
     return found
   }
 
-  async update(shortUrl: string, updateUrlDto: UpdateUrlDto) {
-    const found = await this.findOneByShortUrl(shortUrl)
-    found.shortUrl = updateUrlDto.shortUrl //update the shortUrl
+  private checkUrlOwner(url: Url, userId: number){
+    if (url.user.id !== userId) {
+      throw new ForbiddenException('this url is not yours')
+    }
+  }
+
+  async update(shortName: string, updateUrlDto: UpdateUrlDto, userId: number) {
+    const found = await this.findOneByShortName(shortName)
+    this.checkUrlOwner(found, userId)
+
+    found.shortName = updateUrlDto.shortName //update the shortName
 
     return await this.urlRepo.save(found);
   }
 
-  async remove(shortUrl: string) {
-    const found = await this.findOneByShortUrl(shortUrl)
+  async remove(shortName: string, userId: number) {
+    const found = await this.findOneByShortName(shortName)
+    this.checkUrlOwner(found, userId)
+
     return this.urlRepo.remove(found);
   }
 }

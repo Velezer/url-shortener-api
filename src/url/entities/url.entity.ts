@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "src/user/entities/user.entity";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class Url {
@@ -10,6 +11,9 @@ export class Url {
     longUrl: string;
 
     @Column({ unique: true, nullable: false })
-    shortUrl: string;
+    shortName: string;
+
+    @ManyToOne(() => User, user => user.urls)
+    user: User;
 
 }
